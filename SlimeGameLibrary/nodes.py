@@ -140,7 +140,7 @@ def ConstructSlimeProperties(
     return baseNode
 
 
-def SlimeController(
+def Controller(
     node0: Node,
     node1: Node,
 ):
@@ -261,14 +261,14 @@ def Float(value: int | float | str):
     return AddNode("Float", str(value))
 
 
-def VolleyballGetBool(
+def GetBool(
     value: Literal["Self Can Jump", "Opponent Can Jump", "Ball Is Self Side"],
 ):
     value = ["Self Can Jump", "Opponent Can Jump", "Ball Is Self Side"].index(value)
     return AddNode("VolleyballGetBool", value)
 
 
-def VolleyballGetFloat(
+def GetFloat(
     value: Literal[
         "Delta time",
         "Fixed delta time",
@@ -293,7 +293,7 @@ def VolleyballGetFloat(
     return AddNode("VolleyballGetFloat", value)
 
 
-def VolleyballGetTransform(
+def GetTransform(
     value: Literal[
         "Self", "Opponent", "Ball", "Self Team Spawn", "Opponent Team Spawn"
     ],
@@ -308,7 +308,7 @@ def VolleyballGetTransform(
     return AddNode("VolleyballGetTransform", value)
 
 
-def SlimeGetVector3(
+def GetVector3(
     value: Literal[
         "Self Position",
         "Self Velocity",
