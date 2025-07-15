@@ -261,6 +261,7 @@ def Float(value: int | float | str):
     return AddNode("Float", str(value))
 
 
+@cache
 def GetBool(
     value: Literal["Self Can Jump", "Opponent Can Jump", "Ball Is Self Side"],
 ):
@@ -268,6 +269,7 @@ def GetBool(
     return AddNode("VolleyballGetBool", value)
 
 
+@cache
 def GetFloat(
     value: Literal[
         "Delta time",
@@ -293,6 +295,7 @@ def GetFloat(
     return AddNode("VolleyballGetFloat", value)
 
 
+@cache
 def GetTransform(
     value: Literal[
         "Self", "Opponent", "Ball", "Self Team Spawn", "Opponent Team Spawn"
@@ -308,6 +311,7 @@ def GetTransform(
     return AddNode("VolleyballGetTransform", value)
 
 
+@cache
 def GetVector3(
     value: Literal[
         "Self Position",
