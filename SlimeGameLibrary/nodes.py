@@ -1,5 +1,6 @@
 from typing import Literal
 
+from .data import colorNames, countryNames
 from .lib import AddNode, ConnectPorts, Node, SaveData, data
 from .utils import Color, Vector3
 
@@ -8,17 +9,16 @@ def cache(function):
     cachedNodes = {}
 
     def wrapper(*args):
-        if args in cachedNodes:
-            return cachedNodes[args]
-        else:
-            rv = function(*args)
-            cachedNodes[args] = rv
-            return rv
+        if args not in cachedNodes:
+            cachedNodes[args] = function(*args)
+        return cachedNodes[args]
 
     return wrapper
 
 
-def InitializeSlime(name, color, country, speed, acceleration, jump):
+def InitializeSlime(
+    name, color: colorNames, country: countryNames, speed, acceleration, jump
+):
     nameNode = String(name)
     colorNode = Color(color)
     countryNode = Country(country)
@@ -68,7 +68,7 @@ def ClampFloat(
 
 
 @cache
-def Color(value: Literal[""]):
+def Color(value: colorNames):
     return AddNode("Color", value)
 
 
@@ -151,7 +151,7 @@ def SlimeController(
 
 
 @cache
-def Country(value: str):
+def Country(value: countryNames):
     return AddNode("Country", value)
 
 

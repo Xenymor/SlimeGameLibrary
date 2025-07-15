@@ -1,6 +1,8 @@
+from typing import Literal
+
 from .utils import Color, Vector2, Vector3
 
-colorNames = [
+colorNames = Literal[
     "Black",
     "Blue",
     "Brown",
@@ -16,7 +18,7 @@ colorNames = [
     "White",
     "Yellow",
 ]
-countryNames = [
+countryNames = Literal[
     "Andorra",
     "Argentina",
     "Armenia",
