@@ -1,3 +1,6 @@
 __pycache__/
 .vscode/
 SlimeVolleyball/
+
+# dont want my own slime accidentally getting pushed 💀
+main.py
