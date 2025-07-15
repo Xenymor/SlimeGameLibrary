@@ -140,7 +140,7 @@ def ConstructSlimeProperties(
     return baseNode
 
 
-def Controller(
+def SlimeController(
     node0: Node,
     node1: Node,
 ):
