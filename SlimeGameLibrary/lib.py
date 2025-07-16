@@ -165,9 +165,6 @@ def findNodeByPortSID(portSID):
 
 
 def gridLayout(offsetX=350, offsetY=-215):
-    if not data["serializableNodes"]:
-        return
-
     x = 1263
     y = -278
     nodesPerRow = max(1, int(math.sqrt(len(data["serializableNodes"]))))
@@ -184,9 +181,6 @@ def gridLayout(offsetX=350, offsetY=-215):
 
 
 def autoLayout(offsetX=350, offsetY=-215):
-    if not data["serializableNodes"]:
-        return
-
     adj = {}
     inDegree = {}
 
@@ -270,11 +264,38 @@ def updateConnectionLinePoints():
             ]
 
 
+def removeUnusedNodes():
+    connectedPortSIDs = set()
+    for connection in data["serializableConnections"]:
+        connectedPortSIDs.add(connection["port0SID"])
+        connectedPortSIDs.add(connection["port1SID"])
+
+    nodesToRemove = []
+    for node in data["serializableNodes"].copy():
+        if node["serializableRectTransform"]["localPosition"] != Vector3(0, 0):
+            continue  # skips Debug nodes cuz they have "unused node" String attached
+
+        nodeHasConnections = False
+        for port in node["serializablePorts"]:
+            if port["sID"] in connectedPortSIDs:
+                nodeHasConnections = True
+                break
+
+        if not nodeHasConnections:
+            data["serializableNodes"].remove(node)
+
+    return len(nodesToRemove)
+
+
 def SaveData(
     filePath,
     layout: Literal["auto", "grid", "single", "hidden", None] = "auto",
+    pruneUnusedNodes=True,
     keepPosition=True,
 ):
+    if pruneUnusedNodes:
+        removeUnusedNodes()
+
     match layout:
         case "auto":
             autoLayout()
