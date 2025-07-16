@@ -532,6 +532,14 @@ def connectInputNodes(baseNode, inputTypes, inputs):
         elif type(inputNode) == bool:
             inputNode = bool(inputNode)
 
+        elif type(inputNode) == str:
+            if inputNode in colorNames.__args__:
+                inputNode = Color(inputNode)
+            elif inputNode in countryNames.__args__:
+                inputNode = Country(inputNode)
+            else:
+                inputNode = String(inputNode)
+
         if inputType not in counters:
             counters[inputType] = 1
         num2 = counters[inputType]
