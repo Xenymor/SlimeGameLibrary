@@ -128,8 +128,8 @@ def ConditionalSetVector3(node0: Node, node1: Node, node2: Node, value: bool):
 
 def ConstructSlimeProperties(
     node0: Node,
-    node1: Node,
-    node2: Node,
+    node1: colorNames,
+    node2: countryNames,
     node3: Node,
     node4: Node,
     node5: Node,
@@ -206,7 +206,7 @@ def DebugDrawLine(
     node0: Node,
     node1: Node,
     node2: Node,
-    node3: Node,
+    node3: colorNames,
 ):
     baseNode = AddNode("DebugDrawLine")
     inputTypes = ["Vector3", "Vector3", "Float", "Color"]
@@ -218,7 +218,7 @@ def DebugDrawDisc(
     node0: Node,
     node1: Node,
     node2: Node,
-    node3: Node,
+    node3: colorNames,
 ):
     baseNode = AddNode("DebugDrawDisc")
     inputTypes = ["Vector3", "Float", "Float", "Color"]
