@@ -318,4 +318,4 @@ def SaveData(
     updateConnectionLinePoints()
 
     with open(filePath, "w") as f:
-        json.dump(data, f)
+        json.dump(data, f, separators=(",", ":"))
