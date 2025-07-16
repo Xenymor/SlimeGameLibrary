@@ -86,7 +86,7 @@ def ConstructVector3(
 def CompareBool(
     node0: Node,
     node1: Node,
-    value: Literal["and", "or", "equal to", "xor", "nor", "nand", "xnor"],
+    value: Literal["and", "or", "equal to", "xor", "nor", "nand", "xnor"] = "and",
 ):
     value = ["and", "or", "equal to", "xor", "nor", "nand", "xnor"].index(value)
     baseNode = AddNode("CompareBool", value)
@@ -98,7 +98,7 @@ def CompareBool(
 def CompareFloats(
     node0: Node,
     node1: Node,
-    value: Literal["==", "<", ">", "<=", ">="],
+    value: Literal["==", "<", ">", "<=", ">="] = "==",
 ):
     value = ["==", "<", ">", "<=", ">="].index(value)
     baseNode = AddNode("CompareFloats", value)
@@ -111,7 +111,7 @@ def ConditionalSetFloat(
     node0: Node,
     node1: Node,
     node2: Node,
-    value: bool,
+    value: bool = True,
 ):
     baseNode = AddNode("ConditionalSetFloatV2", "0" if value else "1")
     inputTypes = ["Bool", "Float", "Float"]
@@ -119,7 +119,7 @@ def ConditionalSetFloat(
     return baseNode
 
 
-def ConditionalSetVector3(node0: Node, node1: Node, node2: Node, value: bool):
+def ConditionalSetVector3(node0: Node, node1: Node, node2: Node, value: bool = True):
     baseNode = AddNode("ConditionalSetVector3", "0" if value else "1")
     inputTypes = ["Bool", "Vector3", "Vector3"]
     connectInputNodes(baseNode, inputTypes, [node0, node1, node2])
