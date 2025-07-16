@@ -107,7 +107,7 @@ def CompareFloats(
     return baseNode
 
 
-def ConditionalSetFloatV2(
+def ConditionalSetFloat(
     node0: Node,
     node1: Node,
     node2: Node,
