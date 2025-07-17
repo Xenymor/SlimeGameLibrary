@@ -1,3 +1,4 @@
+import numbers
 from typing import Literal, TypedDict
 
 from .data import colorNames, countryNames
@@ -19,15 +20,12 @@ def cache(function):
 def InitializeSlime(
     name, color: colorNames, country: countryNames, speed, acceleration, jump
 ):
-    nameNode = String(name)
-    colorNode = Color(color)
-    countryNode = Country(country)
     speedNode = Stat(speed)
     accelerationNode = Stat(acceleration)
     jumpNode = Stat(jump)
 
     ConstructSlimeProperties(
-        nameNode, colorNode, countryNode, speedNode, accelerationNode, jumpNode
+        name, color, country, speedNode, accelerationNode, jumpNode
     )
 
 
