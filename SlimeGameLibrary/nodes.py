@@ -590,6 +590,9 @@ class Vector3Components:
         self.y = y
         self.z = z
 
+    def __getitem__(self, index):
+        [self.x, self.y, self.z][index]
+
 
 def Vector3Split(node0: Node):
     baseNode = AddNode("Vector3Split")
