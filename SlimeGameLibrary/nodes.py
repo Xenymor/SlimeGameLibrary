@@ -1,3 +1,4 @@
+import numbers
 from typing import Literal, TypedDict
 
 from .data import colorNames, countryNames
@@ -531,13 +532,13 @@ def connectInputNodes(baseNode, inputTypes, inputs):
         else:
             inputNode = inputData
 
-        if type(inputNode) in [float, int]:
+        if isinstance(inputNode, numbers.Number):
             inputNode = Float(inputNode)
 
-        elif type(inputNode) == bool:
+        elif isinstance(inputNode, bool):
             inputNode = bool(inputNode)
 
-        elif type(inputNode) == str:
+        elif isinstance(inputNode, str):
             if inputNode in colorNames.__args__:
                 inputNode = Color(inputNode)
             elif inputNode in countryNames.__args__:
