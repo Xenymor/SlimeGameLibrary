@@ -598,121 +598,114 @@ def updateConnectionLinePoints():
 
 
 def removeUnusedNodes():
-    port_to_node = {}
-    node_to_ports = {}
-    node_is_string = {}
+    portToNode = {}
+    nodeToPorts = {}
+    nodeIsString = {}
 
     for node in data["serializableNodes"]:
         node_sid = node["sID"]
-        node_is_string[node_sid] = node["id"] == "String"
-        node_to_ports[node_sid] = {"input": [], "output": []}
+        nodeIsString[node_sid] = node["id"] == "String"
+        nodeToPorts[node_sid] = {"input": [], "output": []}
 
         for port in node["serializablePorts"]:
-            port_to_node[port["sID"]] = node_sid
+            portToNode[port["sID"]] = node_sid
             if port["polarity"] == 0:
-                node_to_ports[node_sid]["input"].append(port["sID"])
+                nodeToPorts[node_sid]["input"].append(port["sID"])
             else:
-                node_to_ports[node_sid]["output"].append(port["sID"])
+                nodeToPorts[node_sid]["output"].append(port["sID"])
 
-    connection_graph = {}
-    port_connections = {}
+    connectionGraph = {}
+    portConnections = {}
 
     for node in data["serializableNodes"]:
-        connection_graph[node["sID"]] = {"inputs": set(), "outputs": set()}
+        connectionGraph[node["sID"]] = {"inputs": set(), "outputs": set()}
 
     for connection in data["serializableConnections"]:
-        src_node = port_to_node.get(connection["port0SID"])
-        dst_node = port_to_node.get(connection["port1SID"])
+        sourceNode = portToNode.get(connection["port0SID"])
+        destinationNode = portToNode.get(connection["port1SID"])
 
-        if src_node and dst_node and src_node != dst_node:
-            connection_graph[src_node]["outputs"].add(dst_node)
-            connection_graph[dst_node]["inputs"].add(src_node)
+        if sourceNode and destinationNode and sourceNode != destinationNode:
+            connectionGraph[sourceNode]["outputs"].add(destinationNode)
+            connectionGraph[destinationNode]["inputs"].add(sourceNode)
 
-            port_connections[connection["port0SID"]] = (
-                port_connections.get(connection["port0SID"], 0) + 1
+            portConnections[connection["port0SID"]] = (
+                portConnections.get(connection["port0SID"], 0) + 1
             )
-            port_connections[connection["port1SID"]] = (
-                port_connections.get(connection["port1SID"], 0) + 1
+            portConnections[connection["port1SID"]] = (
+                portConnections.get(connection["port1SID"], 0) + 1
             )
 
     # nodes_to_remove are the BFS starting points
-    nodes_to_remove = set()
+    nodesToRemove = set()
     queue = deque()
 
     for node in data["serializableNodes"]:
         node_sid = node["sID"]
 
-        if node_is_string[node_sid]:
+        if nodeIsString[node_sid]:
             continue
 
-        has_input_ports = len(node_to_ports[node_sid]["input"]) > 0
-        has_output_ports = len(node_to_ports[node_sid]["output"]) > 0
+        hasInputPorts = len(nodeToPorts[node_sid]["input"]) > 0
+        hasOutputPorts = len(nodeToPorts[node_sid]["output"]) > 0
 
-        input_connected = any(
-            port_connections.get(pid, 0) > 0 for pid in node_to_ports[node_sid]["input"]
+        inputConnected = any(
+            portConnections.get(pid, 0) > 0 for pid in nodeToPorts[node_sid]["input"]
         )
 
-        output_connected = any(
-            port_connections.get(pid, 0) > 0
-            for pid in node_to_ports[node_sid]["output"]
+        outputConnected = any(
+            portConnections.get(pid, 0) > 0 for pid in nodeToPorts[node_sid]["output"]
         )
 
-        if (has_input_ports and not input_connected) or (
-            has_output_ports and not output_connected
+        if (hasInputPorts and not inputConnected) or (
+            hasOutputPorts and not outputConnected
         ):
-            nodes_to_remove.add(node_sid)
+            nodesToRemove.add(node_sid)
             queue.append(node_sid)
 
     # BFS to find all nodes that become disconnected
     while queue:
-        current_node = queue.popleft()
+        currentNode = queue.popleft()
 
-        for dependent_node in connection_graph[current_node]["outputs"]:
-            if dependent_node in nodes_to_remove or node_is_string[dependent_node]:
+        for dependentNode in connectionGraph[currentNode]["outputs"]:
+            if dependentNode in nodesToRemove or nodeIsString[dependentNode]:
                 continue
 
-            all_inputs_removed = all(
-                src in nodes_to_remove
-                for src in connection_graph[dependent_node]["inputs"]
-            )
+            if all(
+                src in nodesToRemove for src in connectionGraph[dependentNode]["inputs"]
+            ):
+                nodesToRemove.add(dependentNode)
+                queue.append(dependentNode)
 
-            if all_inputs_removed:
-                nodes_to_remove.add(dependent_node)
-                queue.append(dependent_node)
-
-        for source_node in connection_graph[current_node]["inputs"]:
-            if source_node in nodes_to_remove or node_is_string[source_node]:
+        for sourceNode in connectionGraph[currentNode]["inputs"]:
+            if sourceNode in nodesToRemove or nodeIsString[sourceNode]:
                 continue
 
-            all_outputs_removed = all(
-                dst in nodes_to_remove
-                for dst in connection_graph[source_node]["outputs"]
-            )
+            if all(
+                dst in nodesToRemove for dst in connectionGraph[sourceNode]["outputs"]
+            ):
+                nodesToRemove.add(sourceNode)
+                queue.append(sourceNode)
 
-            if all_outputs_removed:
-                nodes_to_remove.add(source_node)
-                queue.append(source_node)
-
-    connections_to_keep = []
+    activeConnections = []
     for connection in data["serializableConnections"]:
-        src_node = port_to_node.get(connection["port0SID"])
-        dst_node = port_to_node.get(connection["port1SID"])
+        sourceNode = portToNode.get(connection["port0SID"])
+        destinationNode = portToNode.get(connection["port1SID"])
 
         if (
-            src_node not in nodes_to_remove
-            and dst_node not in nodes_to_remove
-            and not node_is_string.get(src_node, False)
-            and not node_is_string.get(dst_node, False)
+            sourceNode not in nodesToRemove
+            and destinationNode not in nodesToRemove
+            and not nodeIsString.get(sourceNode, False)
+            and not nodeIsString.get(destinationNode, False)
         ):
-            connections_to_keep.append(connection)
-    data["serializableConnections"] = connections_to_keep
+            activeConnections.append(connection)
+    data["serializableConnections"] = activeConnections
 
-    nodes_to_keep = []
+    activeNodes = []
     for node in data["serializableNodes"]:
         node_sid = node["sID"]
-        if node_sid not in nodes_to_remove or node_is_string[node_sid]:
-            nodes_to_keep.append(node)
-    data["serializableNodes"] = nodes_to_keep
+        if node_sid not in nodesToRemove or nodeIsString[node_sid]:
+            activeNodes.append(node)
+    data["serializableNodes"] = activeNodes
 
 
 def SaveData(

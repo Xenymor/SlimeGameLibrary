@@ -18,36 +18,36 @@ def cache(function):
 
 
 class GameEntity:
-    def __init__(self, entity_type: str):
-        self.entity_type = entity_type
+    def __init__(self, entityType: str):
+        self.entityType = entityType
 
     @property
     def Position(self) -> Node:
-        return GetVector3(f"{self.entity_type} Position")
+        return GetVector3(f"{self.entityType} Position")
 
     @property
     def Velocity(self) -> Node:
-        return GetVector3(f"{self.entity_type} Velocity")
+        return GetVector3(f"{self.entityType} Velocity")
 
     @property
     def Transform(self) -> Node:
-        return GetTransform(self.entity_type)
+        return GetTransform(self.entityType)
 
 
 class PlayerEntity(GameEntity):
     @property
     def CanJump(self) -> Node:
-        return GetBool(f"{self.entity_type} Can Jump")
+        return GetBool(f"{self.entityType} Can Jump")
 
     @property
     def TeamSpawn(self) -> Node:
-        return GetTransform(f"{self.entity_type} Team Spawn")
+        return GetTransform(f"{self.entityType} Team Spawn")
 
     @property
     def Score(self) -> Node:
-        if self.entity_type == "Self":
+        if self.entityType == "Self":
             return GetFloat("Team score")
-        if self.entity_type == "Opponent":
+        if self.entityType == "Opponent":
             return GetFloat("Opponent score")
 
 
@@ -309,8 +309,8 @@ def Debug(inputData, string: str = None, changePosition=True):
 
     if changePosition:
         # magic numbers for position gotten via
-        # snapped_x = (20 + x) * 64 - 17
-        # snapped_y = -(4 + y) * 64 - 22
+        # snappedX = (20 + x) * 64 - 17
+        # snappedY = -(4 + y) * 64 - 22
         xPos = 1263 - 64 * 6
         yPos = -278 - 64 * 4 * debugCounter
         baseNode = AddNode("Debug", position=Vector3(xPos, yPos - 55))
