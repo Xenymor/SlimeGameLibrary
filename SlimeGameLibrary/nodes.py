@@ -195,30 +195,21 @@ def InitializeSlime(
     )
 
 
-def Power(
-    node0: Node,
-    node1: Node,
-):
+def Power(node0: Node, node1: Node):
     """
     custom x^y node using x^y = e^(y*ln(x))
     """
     return Operation(MultiplyFloats(node1, Operation(node0, "log")), "e^")
 
 
-def AddVector3(
-    node0: Node,
-    node1: Node,
-):
+def AddVector3(node0: Node, node1: Node):
     baseNode = AddNode("AddVector3")
     inputTypes = ["Vector3", "Vector3"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
     return baseNode
 
 
-def AddFloats(
-    node0: Node,
-    node1: Node,
-):
+def AddFloats(node0: Node, node1: Node):
     baseNode = AddNode("AddFloats")
     inputTypes = ["Float", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
@@ -230,11 +221,7 @@ def Bool(value: bool):
     return AddNode("Bool", "0" if value else "1")
 
 
-def ClampFloat(
-    node0: Node,
-    node1: Node,
-    node2: Node,
-):
+def ClampFloat(node0: Node, node1: Node, node2: Node):
     baseNode = AddNode("ClampFloat")
     inputTypes = ["Float", "Float", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1, node2])
@@ -246,11 +233,7 @@ def Color(value: colorNames):
     return AddNode("Color", value)
 
 
-def ConstructVector3(
-    node0: Node,
-    node1: Node,
-    node2: Node,
-):
+def ConstructVector3(node0: Node, node1: Node, node2: Node):
     baseNode = AddNode("ConstructVector3")
     inputTypes = ["Float", "Float", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1, node2])
@@ -270,9 +253,7 @@ def CompareBool(
 
 
 def CompareFloats(
-    node0: Node,
-    node1: Node,
-    value: Literal["==", "<", ">", "<=", ">="] = "==",
+    node0: Node, node1: Node, value: Literal["==", "<", ">", "<=", ">="] = "=="
 ):
     value = ["==", "<", ">", "<=", ">="].index(value)
     baseNode = AddNode("CompareFloats", value)
@@ -281,12 +262,7 @@ def CompareFloats(
     return baseNode
 
 
-def ConditionalSetFloat(
-    node0: Node,
-    node1: Node,
-    node2: Node,
-    value: bool = True,
-):
+def ConditionalSetFloat(node0: Node, node1: Node, node2: Node, value: bool = True):
     baseNode = AddNode("ConditionalSetFloatV2", "0" if value else "1")
     inputTypes = ["Bool", "Float", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1, node2])
@@ -314,10 +290,7 @@ def ConstructSlimeProperties(
     return baseNode
 
 
-def SlimeController(
-    node0: Node,
-    node1: Node,
-):
+def SlimeController(node0: Node, node1: Node):
     baseNode = AddNode("SlimeController")
     inputTypes = ["Vector3", "Bool"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
@@ -329,10 +302,7 @@ def Country(value: countryNames):
     return AddNode("Country", value)
 
 
-def CrossProduct(
-    node0: Node,
-    node1: Node,
-):
+def CrossProduct(node0: Node, node1: Node):
     baseNode = AddNode("CrossProduct")
     inputTypes = ["Vector3", "Vector3"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
@@ -379,54 +349,35 @@ def Debug(inputData, string: str = None, changePosition=True):
     return baseNode
 
 
-def DebugDrawLine(
-    node0: Node,
-    node1: Node,
-    node2: Node,
-    node3: colorNames,
-):
+def DebugDrawLine(node0: Node, node1: Node, node2: Node, node3: colorNames):
     baseNode = AddNode("DebugDrawLine")
     inputTypes = ["Vector3", "Vector3", "Float", "Color"]
     connectInputNodes(baseNode, inputTypes, [node0, node1, node2, node3])
     return baseNode
 
 
-def DebugDrawDisc(
-    node0: Node,
-    node1: Node,
-    node2: Node,
-    node3: colorNames,
-):
+def DebugDrawDisc(node0: Node, node1: Node, node2: Node, node3: colorNames):
     baseNode = AddNode("DebugDrawDisc")
     inputTypes = ["Vector3", "Float", "Float", "Color"]
     connectInputNodes(baseNode, inputTypes, [node0, node1, node2, node3])
     return baseNode
 
 
-def Distance(
-    node0: Node,
-    node1: Node,
-):
+def Distance(node0: Node, node1: Node):
     baseNode = AddNode("Distance")
     inputTypes = ["Vector3", "Vector3"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
     return baseNode
 
 
-def DivideFloats(
-    node0: Node,
-    node1: Node,
-):
+def DivideFloats(node0: Node, node1: Node):
     baseNode = AddNode("DivideFloats")
     inputTypes = ["Float", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
     return baseNode
 
 
-def DotProduct(
-    node0: Node,
-    node1: Node,
-):
+def DotProduct(node0: Node, node1: Node):
     baseNode = AddNode("DotProduct")
     inputTypes = ["Vector3", "Vector3"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
@@ -439,9 +390,7 @@ def Float(value: int | float | str):
 
 
 @cache
-def GetBool(
-    value: Literal["Self Can Jump", "Opponent Can Jump", "Ball Is Self Side"],
-):
+def GetBool(value: Literal["Self Can Jump", "Opponent Can Jump", "Ball Is Self Side"]):
     value = ["Self Can Jump", "Opponent Can Jump", "Ball Is Self Side"].index(value)
     return AddNode("VolleyballGetBool", value)
 
@@ -517,20 +466,14 @@ def Magnitude(node0: Node):
     return baseNode
 
 
-def Modulo(
-    node0: Node,
-    node1: Node,
-):
+def Modulo(node0: Node, node1: Node):
     baseNode = AddNode("Modulo")
     inputTypes = ["Float", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
     return baseNode
 
 
-def MultiplyFloats(
-    node0: Node,
-    node1: Node,
-):
+def MultiplyFloats(node0: Node, node1: Node):
     baseNode = AddNode("MultiplyFloats")
     inputTypes = ["Float", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
@@ -635,20 +578,14 @@ def RelativePosition(
     return baseNode
 
 
-def RandomFloat(
-    node0: Node,
-    node1: Node,
-):
+def RandomFloat(node0: Node, node1: Node):
     baseNode = AddNode("RandomFloat")
     inputTypes = ["Float", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
     return baseNode
 
 
-def ScaleVector3(
-    node0: Node,
-    node1: Node,
-):
+def ScaleVector3(node0: Node, node1: Node):
     baseNode = AddNode("ScaleVector3")
     inputTypes = ["Vector3", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
@@ -662,9 +599,7 @@ class Vector3Components:
         self.z = z
 
 
-def Vector3Split(
-    node0: Node,
-):
+def Vector3Split(node0: Node):
     baseNode = AddNode("Vector3Split")
     inputTypes = ["Vector3"]
     connectInputNodes(baseNode, inputTypes, [node0])
@@ -681,20 +616,14 @@ def String(value: str):
     return AddNode("String", value)
 
 
-def SubtractFloats(
-    node0: Node,
-    node1: Node,
-):
+def SubtractFloats(node0: Node, node1: Node):
     baseNode = AddNode("SubtractFloats")
     inputTypes = ["Float", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
     return baseNode
 
 
-def SubtractVector3(
-    node0: Node,
-    node1: Node,
-):
+def SubtractVector3(node0: Node, node1: Node):
     baseNode = AddNode("SubtractVector3")
     inputTypes = ["Vector3", "Vector3"]
     connectInputNodes(baseNode, inputTypes, [node0, node1])
