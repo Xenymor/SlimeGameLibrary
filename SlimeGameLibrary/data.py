@@ -37,7 +37,7 @@ outputs = {
     "RelativePosition": "Vector3",
     "RandomFloat": float,
     "ScaleVector3": "Vector3",
-    "Vector3Split": "float3",
+    "Vector3Split": float,
     "Stat": "Stat",
     "String": str,
     "SubtractFloats": float,
