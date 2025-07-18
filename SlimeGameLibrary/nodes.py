@@ -183,6 +183,9 @@ def Debug(inputData, string: str = None, changePosition=True):
     global debugCounter
 
     if changePosition:
+        # magic numbers for position gotten via
+        # snapped_x = (20 + x) * 64 - 17
+        # snapped_y = -(4 + y) * 64 - 22
         xPos = 1263 - 64 * 6
         yPos = -278 - 64 * 4 * debugCounter
         baseNode = AddNode("Debug", position=Vector3(xPos, yPos - 55))
