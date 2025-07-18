@@ -664,7 +664,11 @@ def Vector3Split(
     baseNode = AddNode("Vector3Split")
     inputTypes = ["Vector3"]
     connectInputNodes(baseNode, inputTypes, [node0])
-    return {"x": (baseNode, 1), "y": (baseNode, 2), "z": (baseNode, 3)}
+    return {
+        "x": baseNode,
+        "y": Node(baseNode.data, 2),
+        "z": Node(baseNode.data, 3),
+    }
 
 
 @cache
@@ -702,9 +706,13 @@ def connectInputNodes(baseNode, inputTypes, inputs):
 
     for inputType, inputData in zip(inputTypes, inputs):
         num1 = 1
+
+        if isinstance(inputData, Node):
+            num1 = inputData.outputIndex
+
         if isinstance(inputData, tuple):
-            num1 = inputData[1]
             inputNode = inputData[0]
+            num1 = inputData[1]
         else:
             inputNode = inputData
 

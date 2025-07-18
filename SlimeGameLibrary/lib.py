@@ -12,8 +12,9 @@ data = {"serializableNodes": [], "serializableConnections": []}
 
 
 class Node:
-    def __init__(self, data: dict):
+    def __init__(self, data: dict, outputIndex=1):
         self.data = data
+        self.outputIndex = outputIndex
         self.type = outputs[data["id"]]
         self.inputPorts = {}
         self.outputPorts = {}
