@@ -3,7 +3,7 @@ from typing import Literal
 
 from .data import colorNames, countryNames
 from .lib import AddNode, ConnectPorts, Node, SaveData, data
-from .utils import Color, Vector3
+from .utils import Color, Position3
 
 
 def parseLiteral(value):
@@ -246,7 +246,7 @@ def Color(value: colorNames):
     return AddNode("Color", value)
 
 
-def ConstructVector3(node0: Node, node1: Node, node2: Node):
+def Vector3(node0: Node, node1: Node, node2: Node):
     baseNode = AddNode("ConstructVector3")
     inputTypes = ["Float", "Float", "Float"]
     connectInputNodes(baseNode, inputTypes, [node0, node1, node2])
@@ -334,12 +334,14 @@ def Debug(inputData, string: str = None, changePosition=True):
         # snappedY = -(4 + y) * 64 - 22
         xPos = 1263 - 64 * 6
         yPos = -278 - 64 * 4 * debugCounter
-        baseNode = AddNode("Debug", position=Vector3(xPos, yPos - 55))
+        baseNode = AddNode("Debug", position=Position3(xPos, yPos - 55))
         data["serializableNodes"][-1]["serializablePorts"][0][
             "serializableRectTransform"
-        ]["scale"] = Vector3(0, 0)
+        ]["scale"] = Position3(0, 0)
         if string is not None:
-            AddNode("String", string, includePorts=False, position=Vector3(xPos, yPos))
+            AddNode(
+                "String", string, includePorts=False, position=Position3(xPos, yPos)
+            )
 
     else:
         baseNode = AddNode("Debug")

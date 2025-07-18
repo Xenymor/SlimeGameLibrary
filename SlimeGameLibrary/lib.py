@@ -6,7 +6,7 @@ from collections import deque
 from typing import Literal
 
 from .data import colors, outputs, ports, sizes
-from .utils import Color, Vector2, Vector3, generateId
+from .utils import Color, Position2, Position3, generateId
 
 data = {"serializableNodes": [], "serializableConnections": []}
 
@@ -359,18 +359,18 @@ def AddNode(nodeName, nodeValue="", includePorts=True, position=None):
     node = {}
 
     if position is None:
-        position = Vector3(0, 0)
+        position = Position3(0, 0)
 
     nodeId = generateId()
     instanceId = random.randint(0, 999999)
 
     node["serializableRectTransform"] = {}
-    node["serializableRectTransform"]["position"] = Vector3(0, 0)
+    node["serializableRectTransform"]["position"] = Position3(0, 0)
     node["serializableRectTransform"]["localPosition"] = position
-    node["serializableRectTransform"]["anchorMin"] = Vector2(0, 1)
-    node["serializableRectTransform"]["anchorMax"] = Vector2(0, 1)
+    node["serializableRectTransform"]["anchorMin"] = Position2(0, 1)
+    node["serializableRectTransform"]["anchorMax"] = Position2(0, 1)
     node["serializableRectTransform"]["sizeDelta"] = sizes[nodeName]
-    node["serializableRectTransform"]["scale"] = Vector3(1, 1, 1)
+    node["serializableRectTransform"]["scale"] = Position3(1, 1, 1)
     node["id"] = nodeName
     node["sID"] = nodeId
     node["enableSelfConnection"] = False
@@ -388,12 +388,12 @@ def AddNode(nodeName, nodeValue="", includePorts=True, position=None):
             node["serializablePorts"].append(
                 {
                     "serializableRectTransform": {
-                        "position": Vector3(0, 0),
+                        "position": Position3(0, 0),
                         "localPosition": portData["position"],
-                        "anchorMin": Vector2(0, 1),
-                        "anchorMax": Vector2(0, 1),
-                        "sizeDelta": Vector2(40, 40),
-                        "scale": Vector3(1, 1, 1),
+                        "anchorMin": Position2(0, 1),
+                        "anchorMax": Position2(0, 1),
+                        "sizeDelta": Position2(40, 40),
+                        "scale": Position3(1, 1, 1),
                     },
                     "id": portData["id"],
                     "sID": generateId(),
@@ -407,12 +407,12 @@ def AddNode(nodeName, nodeValue="", includePorts=True, position=None):
                     "enableHover": True,
                     "disableClick": False,
                     "controlPointSerializableRectTransform": {
-                        "position": Vector3(0, 0),
+                        "position": Position3(0, 0),
                         "localPosition": portData["controlPointPosition"],
-                        "anchorMin": Vector2(0.5, 0.5),
-                        "anchorMax": Vector2(0.5, 0.5),
-                        "sizeDelta": Vector2(0, 0),
-                        "scale": Vector3(2.21, 2.21, 2.21),
+                        "anchorMin": Position2(0.5, 0.5),
+                        "anchorMax": Position2(0.5, 0.5),
+                        "sizeDelta": Position2(0, 0),
+                        "scale": Position3(2.21, 2.21, 2.21),
                     },
                     "nodeInstanceID": instanceId,
                     "nodeSID": nodeId,
@@ -504,9 +504,9 @@ def gridLayout(offsetX=350, offsetY=-215):
 
     for i, node in enumerate(data["serializableNodes"]):
         transform = node["serializableRectTransform"]
-        if transform["localPosition"] != Vector3(0, 0):
+        if transform["localPosition"] != Position3(0, 0):
             continue
-        transform["localPosition"] = Vector3(x, y)
+        transform["localPosition"] = Position3(x, y)
         x += offsetX
         if (i + 1) % nodesPerRow == 0:
             x = 1263
@@ -568,9 +568,9 @@ def autoLayout(offsetX=350, offsetY=-215):
 
         for node in nodesInColumn:
             transform = node["serializableRectTransform"]
-            if transform["localPosition"] != Vector3(0, 0):
+            if transform["localPosition"] != Position3(0, 0):
                 continue
-            transform["localPosition"] = Vector3(currentX, currentY)
+            transform["localPosition"] = Position3(currentX, currentY)
             currentY += offsetY
 
         currentX += offsetX
@@ -725,16 +725,16 @@ def SaveData(
         case "single":
             for node in data["serializableNodes"]:
                 transform = node["serializableRectTransform"]
-                if transform["localPosition"] != Vector3(0, 0) and keepPosition:
+                if transform["localPosition"] != Position3(0, 0) and keepPosition:
                     continue
-                transform["localPosition"] = Vector3(0, 0)
+                transform["localPosition"] = Position3(0, 0)
         case "hidden":
             for node in data["serializableNodes"]:
                 transform = node["serializableRectTransform"]
-                if transform["localPosition"] != Vector3(0, 0) and keepPosition:
+                if transform["localPosition"] != Position3(0, 0) and keepPosition:
                     continue
-                transform["localPosition"] = Vector3(9999, 9999)
-                transform["scale"] = Vector3(0, 0)
+                transform["localPosition"] = Position3(9999, 9999)
+                transform["scale"] = Position3(0, 0)
 
     updateConnectionLinePoints()
 
