@@ -158,12 +158,7 @@ def Sign(node: Node) -> Node:
 
 
 def Ln(node: Node) -> Node:
-    return Operation(node, "log")
-
-
-def Log(node: Node) -> Node:
-    """Same as ln"""
-    return Operation(node, "log")
+    return Operation(node, "ln")
 
 
 def Log10(node: Node) -> Node:
@@ -199,7 +194,7 @@ def Power(node0: Node, node1: Node):
     """
     custom x^y node using x^y = e^(y*ln(x))
     """
-    return Operation(MultiplyFloats(node1, Operation(node0, "log")), "e^")
+    return Exp(node1 * Ln(node0))
 
 
 def AddVector3(node0: Node, node1: Node):
@@ -509,7 +504,7 @@ def Operation(
         "atan",
         "sqrt",
         "sign",
-        "log",
+        "ln",
         "log10",
         "e^",
         "10^",
@@ -528,7 +523,7 @@ def Operation(
         "atan",
         "sqrt",
         "sign",
-        "log",
+        "ln",
         "log10",
         "e^",
         "10^",
