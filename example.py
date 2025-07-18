@@ -4,16 +4,13 @@ from SlimeGameLibrary import *
 
 InitializeSlime("AIA", "Yellow", "United States of America", 5, 3, 2)
 
-positionSign = RelativePosition(GetTransform("Self Team Spawn"), "Backward")
-behindBallOffset = ScaleVector3(positionSign, 0.4)
-moveTo = AddVector3(GetVector3("Ball Position"), behindBallOffset)
+positionSign = RelativePosition(Self.TeamSpawn, "Backward")
 
-# dont worry about double using stuff like GetVector3
-# it's all cached so it'll reuse existing nodes
+moveTo = Ball.Position + positionSign * 0.4
 
-distanceToBall = Distance(GetVector3("Ball Position"), GetVector3("Self Position"))
-jump = CompareFloats(distanceToBall, 2.25, "<")
+distanceToBall = Distance(Ball.Position, Self.Position)
+jumpCondition = distanceToBall < 2.25
 
-SlimeController(moveTo, jump)
+SlimeController(moveTo, jumpCondition)
 
 SaveData("SlimeVolleyball/AIComp_Data/Saves/AIA python.txt", "grid")
