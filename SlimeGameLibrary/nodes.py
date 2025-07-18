@@ -1,5 +1,5 @@
 import numbers
-from typing import Literal, TypedDict
+from typing import Literal
 
 from .data import colorNames, countryNames
 from .lib import AddNode, ConnectPorts, Node, SaveData, data
@@ -655,20 +655,20 @@ def ScaleVector3(
     return baseNode
 
 
-Vector3Components = TypedDict("Vector3Components", {"x": float, "y": float, "z": float})
+class Vector3Components:
+    def __init__(self, x: Node, y: Node, z: Node):
+        self.x = x
+        self.y = y
+        self.z = z
 
 
 def Vector3Split(
     node0: Node,
-) -> Vector3Components:
+):
     baseNode = AddNode("Vector3Split")
     inputTypes = ["Vector3"]
     connectInputNodes(baseNode, inputTypes, [node0])
-    return {
-        "x": baseNode,
-        "y": Node(baseNode.data, 2),
-        "z": Node(baseNode.data, 3),
-    }
+    return Vector3Components(baseNode, Node(baseNode.data, 2), Node(baseNode.data, 3))
 
 
 @cache
