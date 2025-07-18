@@ -6,6 +6,27 @@ from .lib import AddNode, ConnectPorts, Node, SaveData, data
 from .utils import Color, Vector3
 
 
+def parseLiteral(value):
+    if isinstance(value, Node):
+        return value
+
+    elif isinstance(value, numbers.Number):
+        return Float(value)
+
+    elif isinstance(value, bool):
+        return Bool(value)
+
+    elif isinstance(value, str):
+        if value in colorNames.__args__:
+            return Color(value)
+        elif value in countryNames.__args__:
+            return Country(value)
+        else:
+            return String(value)
+
+    return value
+
+
 def cache(function):
     cachedNodes = {}
 
@@ -334,6 +355,8 @@ def Debug(inputData, string: str = None, changePosition=True):
     else:
         inputNode = inputData
 
+    inputNode = parseLiteral(inputNode)
+
     portName = list(inputNode.outputPorts.keys())[num - 1]
     ConnectPorts((portName, "Any1"), inputNode, baseNode)
     data["serializableConnections"][-1]["line"]["startWidth"] = 0  # invisible line
@@ -640,17 +663,7 @@ def connectInputNodes(baseNode, inputTypes, inputs):
         else:
             inputNode = inputData
 
-        if isinstance(inputNode, numbers.Number):
-            inputNode = Float(inputNode)
-        elif isinstance(inputNode, bool):
-            inputNode = bool(inputNode)
-        elif isinstance(inputNode, str):
-            if inputNode in colorNames.__args__:
-                inputNode = Color(inputNode)
-            elif inputNode in countryNames.__args__:
-                inputNode = Country(inputNode)
-            else:
-                inputNode = String(inputNode)
+        inputNode = parseLiteral(inputNode)
 
         if inputType not in counters:
             counters[inputType] = 1
