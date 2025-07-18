@@ -32,6 +32,16 @@ def InitializeSlime(
     )
 
 
+def Power(
+    node0: Node,
+    node1: Node,
+):
+    """
+    custom x^y node using x^y = e^(y*ln(x))
+    """
+    return Operation(MultiplyFloats(node1, Operation(node0, "log")), "e^")
+
+
 def AddVector3(
     node0: Node,
     node1: Node,
