@@ -80,10 +80,15 @@ class Node:
 
                 return ScaleVector3(self, other)
 
-        elif isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import MultiplyFloats
+        elif isinstance(other, numbers.Number):
+            if self.type == float:
+                from .nodes import MultiplyFloats
 
-            return MultiplyFloats(self, other)
+                return MultiplyFloats(self, other)
+            if self.type == "Vector3":
+                from .nodes import ScaleVector3
+
+                return ScaleVector3(self, other)
 
         return NotImplemented
 
