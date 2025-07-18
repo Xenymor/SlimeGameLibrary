@@ -29,16 +29,19 @@ class Node:
 
     def __add__(self, other):
         if isinstance(other, Node):
-            from .nodes import AddFloats, AddVector3
-
             if self.type == float and other.type == float:
+                from .nodes import AddFloats
+
                 return AddFloats(self, other)
             if self.type == "Vector3" and other.type == "Vector3":
-                return AddVector3(self, other)
-        elif isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import AddFloats, Float
+                from .nodes import AddVector3
 
-            return AddFloats(self, Float(other))
+                return AddVector3(self, other)
+
+        elif isinstance(other, numbers.Number) and self.type == float:
+            from .nodes import AddFloats
+
+            return AddFloats(self, other)
 
         return NotImplemented
 
@@ -47,39 +50,40 @@ class Node:
 
     def __sub__(self, other):
         if isinstance(other, Node):
-            from .nodes import SubtractFloats, SubtractVector3
-
             if self.type == float and other.type == float:
+                from .nodes import SubtractFloats
+
                 return SubtractFloats(self, other)
             if self.type == "Vector3" and other.type == "Vector3":
-                return SubtractVector3(self, other)
-        elif isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import Float, SubtractFloats
+                from .nodes import SubtractVector3
 
-            return SubtractFloats(self, Float(other))
+                return SubtractVector3(self, other)
+
+        elif isinstance(other, numbers.Number) and self.type == float:
+            from .nodes import SubtractFloats
+
+            return SubtractFloats(self, other)
 
         return NotImplemented
 
     def __rsub__(self, other):
-        if isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import Float, SubtractFloats
-
-            return SubtractFloats(Float(other), self)
-
-        return NotImplemented
+        return self.__sub__(other)
 
     def __mul__(self, other):
         if isinstance(other, Node):
-            from .nodes import MultiplyFloats, ScaleVector3
-
             if self.type == float and other.type == float:
+                from .nodes import MultiplyFloats
+
                 return MultiplyFloats(self, other)
             if self.type == "Vector3" and other.type == float:
-                return ScaleVector3(self, other)
-        elif isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import Float, MultiplyFloats
+                from .nodes import ScaleVector3
 
-            return MultiplyFloats(self, Float(other))
+                return ScaleVector3(self, other)
+
+        elif isinstance(other, numbers.Number) and self.type == float:
+            from .nodes import MultiplyFloats
+
+            return MultiplyFloats(self, other)
 
         return NotImplemented
 
@@ -88,24 +92,20 @@ class Node:
 
     def __truediv__(self, other):
         if isinstance(other, Node):
+            if self.type == float and other.type == float:
+                from .nodes import DivideFloats
+
+                return DivideFloats(self, other)
+
+        elif isinstance(other, numbers.Number) and self.type == float:
             from .nodes import DivideFloats
 
-            if self.type == float and other.type == float:
-                return DivideFloats(self, other)
-        elif isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import DivideFloats, Float
-
-            return DivideFloats(self, Float(other))
+            return DivideFloats(self, other)
 
         return NotImplemented
 
     def __rtruediv__(self, other):
-        if isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import DivideFloats, Float
-
-            return DivideFloats(Float(other), self)
-
-        return NotImplemented
+        return self.__truediv__(other)
 
     def __floordiv__(self, other):
         result = self.__truediv__(other)
@@ -116,42 +116,38 @@ class Node:
         return Operation(result, "floor")
 
     def __rfloordiv__(self, other):
-        if isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import DivideFloats, Float, Operation
-
-            result = DivideFloats(Float(other), self)
-            return Operation(result, "floor")
-
-        return NotImplemented
+        return self.__floordiv__(other)
 
     def __mod__(self, other):
         if isinstance(other, Node):
+            if self.type == float and other.type == float:
+                from .nodes import Modulo
+
+                return Modulo(self, other)
+
+        elif isinstance(other, numbers.Number) and self.type == float:
             from .nodes import Modulo
 
-            if self.type == float and other.type == float:
-                return Modulo(self, other)
-        elif isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import Float, Modulo
-
-            return Modulo(self, Float(other))
+            return Modulo(self, other)
 
         return NotImplemented
 
     def __rmod__(self, other):
-        if isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import Float, Modulo
-
-            return Modulo(Float(other), self)
-
-        return NotImplemented
+        return self.__mod__(other)
 
     def __pow__(self, other):
         if isinstance(other, Node):
-            from .nodes import Power
-
             if self.type == float and other.type == float:
+                from .nodes import Power
+
                 return Power(self, other)
+
         elif isinstance(other, numbers.Number) and self.type == float:
+            if other == 2:
+                from .nodes import MultiplyFloats
+
+                return MultiplyFloats(self, self)
+
             from .nodes import Power
 
             return Power(self, other)
@@ -159,18 +155,13 @@ class Node:
         return NotImplemented
 
     def __rpow__(self, other):
-        if isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import Power
-
-            return Power(self, other)
-
-        return NotImplemented
+        return self.__pow__(other)
 
     def __neg__(self):
-        from .nodes import Float, MultiplyFloats
-
         if self.type == float:
-            return MultiplyFloats(self, Float(-1))
+            from .nodes import MultiplyFloats
+
+            return MultiplyFloats(self, -1)
 
         return NotImplemented
 
@@ -178,35 +169,41 @@ class Node:
         return self
 
     def __abs__(self):
-        from .nodes import Operation
-
         if self.type == float:
+            from .nodes import Operation
+
             return Operation(self, "abs")
 
         return NotImplemented
 
     def __invert__(self):
-        from .nodes import Not
-
         if self.type == bool:
+            from .nodes import Not
+
             return Not(self)
 
         return NotImplemented
 
     def __eq__(self, other):
-        from .nodes import CompareBool, CompareFloats, Float
-
         if isinstance(other, Node):
             if self.type == float and other.type == float:
+                from .nodes import CompareFloats
+
                 return CompareFloats(self, other)
             if self.type == bool and other.type == bool:
-                return CompareBool(self, other)
-        elif isinstance(other, numbers.Number) and self.type == float:
-            return CompareFloats(self, Float(other))
-        elif isinstance(other, bool) and self.type == bool:
-            from .nodes import Bool
+                from .nodes import CompareBool
 
-            return CompareBool(self, Bool(other))
+                return CompareBool(self, other)
+
+        elif isinstance(other, numbers.Number) and self.type == float:
+            from .nodes import CompareFloats
+
+            return CompareFloats(self, other)
+
+        elif isinstance(other, bool) and self.type == bool:
+            from .nodes import CompareBool
+
+            return CompareBool(self, other)
 
         return NotImplemented
 
@@ -220,95 +217,101 @@ class Node:
 
     def __lt__(self, other):
         if isinstance(other, Node):
+            if self.type == float and other.type == float:
+                from .nodes import CompareFloats
+
+                return CompareFloats(self, other, "<")
+
+        elif isinstance(other, numbers.Number) and self.type == float:
             from .nodes import CompareFloats
 
-            if self.type == float and other.type == float:
-                return CompareFloats(self, other, "<")
-        elif isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import CompareFloats, Float
-
-            return CompareFloats(self, Float(other), "<")
+            return CompareFloats(self, other, "<")
 
         return NotImplemented
 
     def __le__(self, other):
         if isinstance(other, Node):
+            if self.type == float and other.type == float:
+                from .nodes import CompareFloats
+
+                return CompareFloats(self, other, "<=")
+
+        elif isinstance(other, numbers.Number) and self.type == float:
             from .nodes import CompareFloats
 
-            if self.type == float and other.type == float:
-                return CompareFloats(self, other, "<=")
-        elif isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import CompareFloats, Float
-
-            return CompareFloats(self, Float(other), "<=")
+            return CompareFloats(self, other, "<=")
 
         return NotImplemented
 
     def __gt__(self, other):
         if isinstance(other, Node):
+            if self.type == float and other.type == float:
+                from .nodes import CompareFloats
+
+                return CompareFloats(self, other, ">")
+
+        elif isinstance(other, numbers.Number) and self.type == float:
             from .nodes import CompareFloats
 
-            if self.type == float and other.type == float:
-                return CompareFloats(self, other, ">")
-        elif isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import CompareFloats, Float
-
-            return CompareFloats(self, Float(other), ">")
+            return CompareFloats(self, other, ">")
 
         return NotImplemented
 
     def __ge__(self, other):
         if isinstance(other, Node):
+            if self.type == float and other.type == float:
+                from .nodes import CompareFloats
+
+                return CompareFloats(self, other, ">=")
+
+        elif isinstance(other, numbers.Number) and self.type == float:
             from .nodes import CompareFloats
 
-            if self.type == float and other.type == float:
-                return CompareFloats(self, other, ">=")
-        elif isinstance(other, numbers.Number) and self.type == float:
-            from .nodes import CompareFloats, Float
-
-            return CompareFloats(self, Float(other), ">=")
+            return CompareFloats(self, other, ">=")
 
         return NotImplemented
 
     def __and__(self, other):
         if isinstance(other, Node):
+            if self.type == bool and other.type == bool:
+                from .nodes import CompareBool
+
+                return CompareBool(self, other, "and")
+
+        elif isinstance(other, bool) and self.type == bool:
             from .nodes import CompareBool
 
-            if self.type == bool and other.type == bool:
-                return CompareBool(self, other, "and")
-        elif isinstance(other, bool) and self.type == bool:
-            from .nodes import Bool, CompareBool
-
-            return CompareBool(self, Bool(other), "and")
+            return CompareBool(self, other, "and")
 
         return NotImplemented
 
     def __rand__(self, other):
         if isinstance(other, bool) and self.type == bool:
-            from .nodes import Bool, CompareBool
+            from .nodes import CompareBool
 
-            return CompareBool(Bool(other), self, "and")
+            return CompareBool(other, self, "and")
 
         return NotImplemented
 
     def __or__(self, other):
         if isinstance(other, Node):
+            if self.type == bool and other.type == bool:
+                from .nodes import CompareBool
+
+                return CompareBool(self, other, "or")
+
+        elif isinstance(other, bool) and self.type == bool:
             from .nodes import CompareBool
 
-            if self.type == bool and other.type == bool:
-                return CompareBool(self, other, "or")
-        elif isinstance(other, bool) and self.type == bool:
-            from .nodes import Bool, CompareBool
-
-            return CompareBool(self, Bool(other), "or")
+            return CompareBool(self, other, "or")
 
         return NotImplemented
 
     def __ror__(self, other):
         if isinstance(other, bool) and self.type == bool:
-            from .nodes import Bool, CompareBool
+            from .nodes import CompareBool
 
-            return CompareBool(Bool(other), self, "or")
+            return CompareBool(other, self, "or")
 
         return NotImplemented
 
@@ -318,26 +321,27 @@ class Node:
 
             if self.type == bool and other.type == bool:
                 return CompareBool(self, other, "xor")
-        elif isinstance(other, bool) and self.type == bool:
-            from .nodes import Bool, CompareBool
 
-            return CompareBool(self, Bool(other), "xor")
+        elif isinstance(other, bool) and self.type == bool:
+            from .nodes import CompareBool
+
+            return CompareBool(self, other, "xor")
 
         return NotImplemented
 
     def __rxor__(self, other):
         if isinstance(other, bool) and self.type == bool:
-            from .nodes import Bool, CompareBool
+            from .nodes import CompareBool
 
-            return CompareBool(Bool(other), self, "xor")
+            return CompareBool(other, self, "xor")
 
         return NotImplemented
 
     def __matmul__(self, other):
         if isinstance(other, Node):
-            from .nodes import DotProduct
-
             if self.type == "Vector3" and other.type == "Vector3":
+                from .nodes import DotProduct
+
                 return DotProduct(self, other)
 
         return NotImplemented
