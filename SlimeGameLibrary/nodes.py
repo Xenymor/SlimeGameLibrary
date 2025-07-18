@@ -17,6 +17,169 @@ def cache(function):
     return wrapper
 
 
+class GameEntity:
+    def __init__(self, entity_type: str):
+        self.entity_type = entity_type
+
+    @property
+    def Position(self) -> Node:
+        return GetVector3(f"{self.entity_type} Position")
+
+    @property
+    def Velocity(self) -> Node:
+        return GetVector3(f"{self.entity_type} Velocity")
+
+    @property
+    def Transform(self) -> Node:
+        return GetTransform(self.entity_type)
+
+
+class PlayerEntity(GameEntity):
+    @property
+    def CanJump(self) -> Node:
+        return GetBool(f"{self.entity_type} Can Jump")
+
+    @property
+    def TeamSpawn(self) -> Node:
+        return GetTransform(f"{self.entity_type} Team Spawn")
+
+    @property
+    def Score(self) -> Node:
+        if self.entity_type == "Self":
+            return GetFloat("Team score")
+        if self.entity_type == "Opponent":
+            return GetFloat("Opponent score")
+
+
+class BallClass(GameEntity):
+    def __init__(self):
+        super().__init__("Ball")
+
+    @property
+    def IsSelfSide(self) -> Node:
+        return GetBool("Ball Is Self Side")
+
+    @property
+    def TouchesRemaining(self) -> Node:
+        return GetFloat("Ball touches remaining")
+
+
+class GameClass:
+    @property
+    def DeltaTime(self) -> Node:
+        return GetFloat("Delta time")
+
+    @property
+    def FixedDeltaTime(self) -> Node:
+        return GetFloat("Fixed delta time")
+
+    @property
+    def Gravity(self) -> Node:
+        return GetFloat("Gravity")
+
+    @property
+    def Pi(self) -> Node:
+        return GetFloat("Pi")
+
+    @property
+    def SimulationDuration(self) -> Node:
+        return GetFloat("Simulation duration")
+
+
+Self = PlayerEntity("Self")
+Opponent = PlayerEntity("Opponent")
+Ball = BallClass()
+Game = GameClass()
+
+
+def And(node0: Node, node1: Node) -> Node:
+    return CompareBool(node0, node1, "and")
+
+
+def Or(node0: Node, node1: Node) -> Node:
+    return CompareBool(node0, node1, "or")
+
+
+def Xor(node0: Node, node1: Node) -> Node:
+    return CompareBool(node0, node1, "xor")
+
+
+def Equal(node0: Node, node1: Node) -> Node:
+    """Bool comparison"""
+    return CompareBool(node0, node1, "equal to")
+
+
+def Abs(node: Node) -> Node:
+    return Operation(node, "abs")
+
+
+def Round(node: Node) -> Node:
+    return Operation(node, "round")
+
+
+def Floor(node: Node) -> Node:
+    return Operation(node, "floor")
+
+
+def Ceil(node: Node) -> Node:
+    return Operation(node, "ceil")
+
+
+def Sin(node: Node) -> Node:
+    return Operation(node, "sin")
+
+
+def Cos(node: Node) -> Node:
+    return Operation(node, "cos")
+
+
+def Tan(node: Node) -> Node:
+    return Operation(node, "tan")
+
+
+def Asin(node: Node) -> Node:
+    return Operation(node, "asin")
+
+
+def Acos(node: Node) -> Node:
+    return Operation(node, "acos")
+
+
+def Atan(node: Node) -> Node:
+    return Operation(node, "atan")
+
+
+def Sqrt(node: Node) -> Node:
+    return Operation(node, "sqrt")
+
+
+def Sign(node: Node) -> Node:
+    return Operation(node, "sign")
+
+
+def Ln(node: Node) -> Node:
+    return Operation(node, "log")
+
+
+def Log(node: Node) -> Node:
+    """Same as ln"""
+    return Operation(node, "log")
+
+
+def Log10(node: Node) -> Node:
+    return Operation(node, "log10")
+
+
+def Exp(node: Node) -> Node:
+    """e^x"""
+    return Operation(node, "e^")
+
+
+def Pow10(node: Node) -> Node:
+    """10^x"""
+    return Operation(node, "10^")
+
+
 def InitializeSlime(
     name, color: colorNames, country: countryNames, speed, acceleration, jump
 ):
@@ -27,6 +190,16 @@ def InitializeSlime(
     ConstructSlimeProperties(
         name, color, country, speedNode, accelerationNode, jumpNode
     )
+
+
+def Power(
+    node0: Node,
+    node1: Node,
+):
+    """
+    custom x^y node using x^y = e^(y*ln(x))
+    """
+    return Operation(MultiplyFloats(node1, Operation(node0, "log")), "e^")
 
 
 def AddVector3(
@@ -170,6 +343,9 @@ def Debug(inputData, string: str = None, changePosition=True):
     global debugCounter
 
     if changePosition:
+        # magic numbers for position gotten via
+        # snapped_x = (20 + x) * 64 - 17
+        # snapped_y = -(4 + y) * 64 - 22
         xPos = 1263 - 64 * 6
         yPos = -278 - 64 * 4 * debugCounter
         baseNode = AddNode("Debug", position=Vector3(xPos, yPos - 55))
@@ -485,7 +661,11 @@ def Vector3Split(
     baseNode = AddNode("Vector3Split")
     inputTypes = ["Vector3"]
     connectInputNodes(baseNode, inputTypes, [node0])
-    return {"x": (baseNode, 1), "y": (baseNode, 2), "z": (baseNode, 3)}
+    return {
+        "x": baseNode,
+        "y": Node(baseNode.data, 2),
+        "z": Node(baseNode.data, 3),
+    }
 
 
 @cache
@@ -523,9 +703,13 @@ def connectInputNodes(baseNode, inputTypes, inputs):
 
     for inputType, inputData in zip(inputTypes, inputs):
         num1 = 1
+
+        if isinstance(inputData, Node):
+            num1 = inputData.outputIndex
+
         if isinstance(inputData, tuple):
-            num1 = inputData[1]
             inputNode = inputData[0]
+            num1 = inputData[1]
         else:
             inputNode = inputData
 
