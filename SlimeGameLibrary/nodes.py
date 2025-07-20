@@ -357,7 +357,11 @@ def Debug(inputData, string: str = None, changePosition=True):
         inputNode = parseLiteral(inputData)
         num = inputNode.outputIndex
 
-    ports = [port["id"] for port in inputNode.data["serializablePorts"] if port["polarity"] != 0]
+    ports = [
+        port["id"]
+        for port in inputNode.data["serializablePorts"]
+        if port["polarity"] != 0
+    ]
     portName = ports[num - 1]
     ConnectPorts((portName, "Any1"), inputNode, baseNode)
     data["serializableConnections"][-1]["line"]["startWidth"] = 0  # invisible line
