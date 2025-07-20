@@ -84,6 +84,10 @@ class Node:
                 from .nodes import ScaleVector3
 
                 return ScaleVector3(self, other)
+            if self.type == float and other.type == "Vector3":
+                from .nodes import ScaleVector3
+
+                return ScaleVector3(other, self)
 
         elif isinstance(other, numbers.Number):
             if self.type == float:
