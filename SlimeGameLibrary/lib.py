@@ -69,7 +69,9 @@ class Node:
     def __rsub__(self, other):
         if isinstance(other, numbers.Number) and self.type == float:
             from .nodes import SubtractFloats
+
             return SubtractFloats(other, self)
+
         return NotImplemented
 
     def __mul__(self, other):
@@ -115,7 +117,9 @@ class Node:
     def __rtruediv__(self, other):
         if isinstance(other, numbers.Number) and self.type == float:
             from .nodes import DivideFloats
+
             return DivideFloats(other, self)
+
         return NotImplemented
 
     def __floordiv__(self, other):
@@ -127,7 +131,15 @@ class Node:
         return Operation(result, "floor")
 
     def __rfloordiv__(self, other):
-        return self.__floordiv__(other)
+        if isinstance(other, numbers.Number) and self.type == float:
+            from .nodes import DivideFloats
+
+            div_result = DivideFloats(other, self)
+            from .nodes import Operation
+
+            return Operation(div_result, "floor")
+
+        return NotImplemented
 
     def __mod__(self, other):
         if isinstance(other, Node):
@@ -144,7 +156,12 @@ class Node:
         return NotImplemented
 
     def __rmod__(self, other):
-        return self.__mod__(other)
+        if isinstance(other, numbers.Number) and self.type == float:
+            from .nodes import Modulo
+
+            return Modulo(other, self)
+
+        return NotImplemented
 
     def __pow__(self, other):
         if isinstance(other, Node):
@@ -166,7 +183,12 @@ class Node:
         return NotImplemented
 
     def __rpow__(self, other):
-        return self.__pow__(other)
+        if isinstance(other, numbers.Number) and self.type == float:
+            from .nodes import Power
+
+            return Power(other, self)
+
+        return NotImplemented
 
     def __neg__(self):
         if self.type == float:
