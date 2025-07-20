@@ -663,7 +663,7 @@ def removeUnusedNodes():
                 portConnections.get(connection["port1SID"], 0) + 1
             )
 
-    # nodes_to_remove are the BFS starting points
+    # nodesToRemove are the BFS starting points
     nodesToRemove = set()
     queue = deque()
 
@@ -719,12 +719,7 @@ def removeUnusedNodes():
         sourceNode = portToNode.get(connection["port0SID"])
         destinationNode = portToNode.get(connection["port1SID"])
 
-        if (
-            sourceNode not in nodesToRemove
-            and destinationNode not in nodesToRemove
-            and not nodeIsString.get(sourceNode, False)
-            and not nodeIsString.get(destinationNode, False)
-        ):
+        if sourceNode not in nodesToRemove and destinationNode not in nodesToRemove:
             activeConnections.append(connection)
     data["serializableConnections"] = activeConnections
 
