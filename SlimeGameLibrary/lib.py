@@ -27,7 +27,7 @@ class Node:
     def __repr__(self):
         return f"Node(type='{self.type}', id='{self.data.get('sID', 'unknown')}')"
 
-    def __add__(self, other):
+    def __add__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import AddFloats
@@ -45,10 +45,10 @@ class Node:
 
         return NotImplemented
 
-    def __radd__(self, other):
+    def __radd__(self, other) -> "Node":
         return self.__add__(other)
 
-    def __sub__(self, other):
+    def __sub__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import SubtractFloats
@@ -66,7 +66,7 @@ class Node:
 
         return NotImplemented
 
-    def __rsub__(self, other):
+    def __rsub__(self, other) -> "Node":
         if isinstance(other, numbers.Number) and self.type == float:
             from .nodes import SubtractFloats
 
@@ -74,7 +74,7 @@ class Node:
 
         return NotImplemented
 
-    def __mul__(self, other):
+    def __mul__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import MultiplyFloats
@@ -97,10 +97,10 @@ class Node:
 
         return NotImplemented
 
-    def __rmul__(self, other):
+    def __rmul__(self, other) -> "Node":
         return self.__mul__(other)
 
-    def __truediv__(self, other):
+    def __truediv__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import DivideFloats
@@ -114,7 +114,7 @@ class Node:
 
         return NotImplemented
 
-    def __rtruediv__(self, other):
+    def __rtruediv__(self, other) -> "Node":
         if isinstance(other, numbers.Number) and self.type == float:
             from .nodes import DivideFloats
 
@@ -122,7 +122,7 @@ class Node:
 
         return NotImplemented
 
-    def __floordiv__(self, other):
+    def __floordiv__(self, other) -> "Node":
         result = self.__truediv__(other)
         if result is NotImplemented:
             return result
@@ -130,7 +130,7 @@ class Node:
 
         return Operation(result, "floor")
 
-    def __rfloordiv__(self, other):
+    def __rfloordiv__(self, other) -> "Node":
         if isinstance(other, numbers.Number) and self.type == float:
             from .nodes import DivideFloats
 
@@ -141,7 +141,7 @@ class Node:
 
         return NotImplemented
 
-    def __mod__(self, other):
+    def __mod__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import Modulo
@@ -155,7 +155,7 @@ class Node:
 
         return NotImplemented
 
-    def __rmod__(self, other):
+    def __rmod__(self, other) -> "Node":
         if isinstance(other, numbers.Number) and self.type == float:
             from .nodes import Modulo
 
@@ -163,7 +163,7 @@ class Node:
 
         return NotImplemented
 
-    def __pow__(self, other):
+    def __pow__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import Power
@@ -182,7 +182,7 @@ class Node:
 
         return NotImplemented
 
-    def __rpow__(self, other):
+    def __rpow__(self, other) -> "Node":
         if isinstance(other, numbers.Number) and self.type == float:
             from .nodes import Power
 
@@ -190,7 +190,7 @@ class Node:
 
         return NotImplemented
 
-    def __neg__(self):
+    def __neg__(self) -> "Node":
         if self.type == float:
             from .nodes import MultiplyFloats
 
@@ -198,10 +198,10 @@ class Node:
 
         return NotImplemented
 
-    def __pos__(self):
+    def __pos__(self) -> "Node":
         return self
 
-    def __abs__(self):
+    def __abs__(self) -> "Node":
         if self.type == float:
             from .nodes import Operation
 
@@ -209,7 +209,7 @@ class Node:
 
         return NotImplemented
 
-    def __invert__(self):
+    def __invert__(self) -> "Node":
         if self.type == bool:
             from .nodes import Not
 
@@ -217,7 +217,7 @@ class Node:
 
         return NotImplemented
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import CompareFloats
@@ -240,7 +240,7 @@ class Node:
 
         return NotImplemented
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> "Node":
         result = self.__eq__(other)
         if result is NotImplemented:
             return result
@@ -248,7 +248,7 @@ class Node:
 
         return Not(result)
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import CompareFloats
@@ -262,7 +262,7 @@ class Node:
 
         return NotImplemented
 
-    def __le__(self, other):
+    def __le__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import CompareFloats
@@ -276,7 +276,7 @@ class Node:
 
         return NotImplemented
 
-    def __gt__(self, other):
+    def __gt__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import CompareFloats
@@ -290,7 +290,7 @@ class Node:
 
         return NotImplemented
 
-    def __ge__(self, other):
+    def __ge__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
                 from .nodes import CompareFloats
@@ -304,7 +304,7 @@ class Node:
 
         return NotImplemented
 
-    def __and__(self, other):
+    def __and__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == bool and other.type == bool:
                 from .nodes import CompareBool
@@ -318,7 +318,7 @@ class Node:
 
         return NotImplemented
 
-    def __rand__(self, other):
+    def __rand__(self, other) -> "Node":
         if isinstance(other, bool) and self.type == bool:
             from .nodes import CompareBool
 
@@ -326,7 +326,7 @@ class Node:
 
         return NotImplemented
 
-    def __or__(self, other):
+    def __or__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == bool and other.type == bool:
                 from .nodes import CompareBool
@@ -340,7 +340,7 @@ class Node:
 
         return NotImplemented
 
-    def __ror__(self, other):
+    def __ror__(self, other) -> "Node":
         if isinstance(other, bool) and self.type == bool:
             from .nodes import CompareBool
 
@@ -348,7 +348,7 @@ class Node:
 
         return NotImplemented
 
-    def __xor__(self, other):
+    def __xor__(self, other) -> "Node":
         if isinstance(other, Node):
             from .nodes import CompareBool
 
@@ -362,7 +362,7 @@ class Node:
 
         return NotImplemented
 
-    def __rxor__(self, other):
+    def __rxor__(self, other) -> "Node":
         if isinstance(other, bool) and self.type == bool:
             from .nodes import CompareBool
 
@@ -370,7 +370,7 @@ class Node:
 
         return NotImplemented
 
-    def __matmul__(self, other):
+    def __matmul__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == "Vector3" and other.type == "Vector3":
                 from .nodes import DotProduct
@@ -379,7 +379,7 @@ class Node:
 
         return NotImplemented
 
-    def __rmatmul__(self, other):
+    def __rmatmul__(self, other) -> "Node":
         return self.__matmul__(other)
 
 
