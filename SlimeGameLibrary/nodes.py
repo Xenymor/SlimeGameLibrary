@@ -10,11 +10,11 @@ def parseLiteral(value):
     if isinstance(value, Node):
         return value
 
-    elif isinstance(value, numbers.Number):
-        return Float(value)
-
     elif isinstance(value, bool):
         return Bool(value)
+
+    elif isinstance(value, numbers.Number):
+        return Float(value)
 
     elif isinstance(value, str):
         if value in colorNames.__args__:
