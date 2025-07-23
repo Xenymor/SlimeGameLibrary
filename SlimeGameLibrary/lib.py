@@ -24,6 +24,30 @@ class Node:
             else:
                 self.outputPorts[port["id"]] = port
 
+    @property
+    def x(self):
+        if self.type == "Vector3":
+            from .nodes import Vector3Split
+
+            return Vector3Split(self).x
+        raise AttributeError("'Node' object has no attribute 'x'")
+
+    @property
+    def y(self):
+        if self.type == "Vector3":
+            from .nodes import Vector3Split
+
+            return Vector3Split(self).y
+        raise AttributeError("'Node' object has no attribute 'y'")
+
+    @property
+    def z(self):
+        if self.type == "Vector3":
+            from .nodes import Vector3Split
+
+            return Vector3Split(self).z
+        raise AttributeError("'Node' object has no attribute 'z'")
+
     def __repr__(self):
         return f"Node(type='{self.type}', id='{self.data.get('sID', 'unknown')}')"
 
