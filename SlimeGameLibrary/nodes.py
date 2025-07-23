@@ -196,6 +196,7 @@ def Pow10(node: Node) -> Node:
     return Operation(node, "10^")
 
 
+@cache
 def InitializeSlime(
     name, color: colorNames, country: countryNames, speed, acceleration, jump
 ):
@@ -215,6 +216,7 @@ def Power(node0: Node, node1: Node):
     return Exp(node1 * Ln(node0))
 
 
+@cache
 def AddVector3(node0: Node, node1: Node):
     baseNode = AddNode("AddVector3")
     inputTypes = ["Vector3", "Vector3"]
@@ -222,6 +224,7 @@ def AddVector3(node0: Node, node1: Node):
     return baseNode
 
 
+@cache
 def AddFloats(node0: Node, node1: Node):
     baseNode = AddNode("AddFloats")
     inputTypes = ["Float", "Float"]
@@ -234,6 +237,7 @@ def Bool(value: bool):
     return AddNode("Bool", "0" if value else "1")
 
 
+@cache
 def ClampFloat(node0: Node, node1: Node, node2: Node):
     baseNode = AddNode("ClampFloat")
     inputTypes = ["Float", "Float", "Float"]
@@ -246,6 +250,7 @@ def Color(value: colorNames):
     return AddNode("Color", value)
 
 
+@cache
 def Vector3(node0: Node, node1: Node, node2: Node):
     baseNode = AddNode("ConstructVector3")
     inputTypes = ["Float", "Float", "Float"]
@@ -253,6 +258,7 @@ def Vector3(node0: Node, node1: Node, node2: Node):
     return baseNode
 
 
+@cache
 def CompareBool(
     node0: Node,
     node1: Node,
@@ -265,6 +271,7 @@ def CompareBool(
     return baseNode
 
 
+@cache
 def CompareFloats(
     node0: Node, node1: Node, value: Literal["==", "<", ">", "<=", ">="] = "=="
 ):
@@ -275,6 +282,7 @@ def CompareFloats(
     return baseNode
 
 
+@cache
 def ConditionalSetFloat(node0: Node, node1: Node, node2: Node, value: bool = True):
     baseNode = AddNode("ConditionalSetFloatV2", "0" if value else "1")
     inputTypes = ["Bool", "Float", "Float"]
@@ -282,6 +290,7 @@ def ConditionalSetFloat(node0: Node, node1: Node, node2: Node, value: bool = Tru
     return baseNode
 
 
+@cache
 def ConditionalSetVector3(node0: Node, node1: Node, node2: Node, value: bool = True):
     baseNode = AddNode("ConditionalSetVector3", "0" if value else "1")
     inputTypes = ["Bool", "Vector3", "Vector3"]
@@ -289,6 +298,7 @@ def ConditionalSetVector3(node0: Node, node1: Node, node2: Node, value: bool = T
     return baseNode
 
 
+@cache
 def ConstructSlimeProperties(
     node0: Node,
     node1: colorNames,
@@ -303,6 +313,7 @@ def ConstructSlimeProperties(
     return baseNode
 
 
+@cache
 def SlimeController(node0: Node, node1: Node):
     baseNode = AddNode("SlimeController")
     inputTypes = ["Vector3", "Bool"]
@@ -315,6 +326,7 @@ def Country(value: countryNames):
     return AddNode("Country", value)
 
 
+@cache
 def CrossProduct(node0: Node, node1: Node):
     baseNode = AddNode("CrossProduct")
     inputTypes = ["Vector3", "Vector3"]
@@ -383,6 +395,7 @@ def DebugDrawDisc(node0: Node, node1: Node, node2: Node, node3: colorNames):
     return baseNode
 
 
+@cache
 def Distance(node0: Node, node1: Node):
     baseNode = AddNode("Distance")
     inputTypes = ["Vector3", "Vector3"]
@@ -390,6 +403,7 @@ def Distance(node0: Node, node1: Node):
     return baseNode
 
 
+@cache
 def DivideFloats(node0: Node, node1: Node):
     baseNode = AddNode("DivideFloats")
     inputTypes = ["Float", "Float"]
@@ -397,6 +411,7 @@ def DivideFloats(node0: Node, node1: Node):
     return baseNode
 
 
+@cache
 def DotProduct(node0: Node, node1: Node):
     baseNode = AddNode("DotProduct")
     inputTypes = ["Vector3", "Vector3"]
@@ -479,6 +494,7 @@ def GetVector3(
     return AddNode("SlimeGetVector3", value)
 
 
+@cache
 def Magnitude(node0: Node):
     baseNode = AddNode("Magnitude")
     inputTypes = ["Vector3"]
@@ -486,6 +502,7 @@ def Magnitude(node0: Node):
     return baseNode
 
 
+@cache
 def Modulo(node0: Node, node1: Node):
     baseNode = AddNode("Modulo")
     inputTypes = ["Float", "Float"]
@@ -493,6 +510,7 @@ def Modulo(node0: Node, node1: Node):
     return baseNode
 
 
+@cache
 def MultiplyFloats(node0: Node, node1: Node):
     baseNode = AddNode("MultiplyFloats")
     inputTypes = ["Float", "Float"]
@@ -500,6 +518,7 @@ def MultiplyFloats(node0: Node, node1: Node):
     return baseNode
 
 
+@cache
 def Not(node0: Node):
     baseNode = AddNode("Not")
     inputTypes = ["Bool"]
@@ -507,6 +526,7 @@ def Not(node0: Node):
     return baseNode
 
 
+@cache
 def Normalize(node0: Node):
     baseNode = AddNode("Normalize")
     inputTypes = ["Vector3"]
@@ -514,6 +534,7 @@ def Normalize(node0: Node):
     return baseNode
 
 
+@cache
 def Operation(
     node0: Node,
     value: Literal[
@@ -559,6 +580,7 @@ def Operation(
     return baseNode
 
 
+@cache
 def RelativePosition(
     node0: Node,
     value: Literal[
@@ -605,6 +627,7 @@ def RandomFloat(node0: Node, node1: Node):
     return baseNode
 
 
+@cache
 def ScaleVector3(node0: Node, node1: Node):
     baseNode = AddNode("ScaleVector3")
     inputTypes = ["Vector3", "Float"]
@@ -622,6 +645,7 @@ class Vector3Components:
         return [self.x, self.y, self.z][index]
 
 
+@cache
 def Vector3Split(node0: Node):
     baseNode = AddNode("Vector3Split")
     inputTypes = ["Vector3"]
@@ -639,6 +663,7 @@ def String(value: str):
     return AddNode("String", value)
 
 
+@cache
 def SubtractFloats(node0: Node, node1: Node):
     baseNode = AddNode("SubtractFloats")
     inputTypes = ["Float", "Float"]
@@ -646,6 +671,7 @@ def SubtractFloats(node0: Node, node1: Node):
     return baseNode
 
 
+@cache
 def SubtractVector3(node0: Node, node1: Node):
     baseNode = AddNode("SubtractVector3")
     inputTypes = ["Vector3", "Vector3"]

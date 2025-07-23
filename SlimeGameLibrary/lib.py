@@ -49,7 +49,10 @@ class Node:
         raise AttributeError("'Node' object has no attribute 'z'")
 
     def __repr__(self):
-        return f"Node(type='{self.type}', id='{self.data.get('sID', 'unknown')}')"
+        return f"Node(type='{self.type}', id='{self.data['sID']}')"
+
+    def __hash__(self):
+        return int(self.data["sID"].replace("-", ""), 16)
 
     def __add__(self, other) -> "Node":
         if isinstance(other, Node):
