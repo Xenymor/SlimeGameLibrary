@@ -201,7 +201,7 @@ class Node:
     def __pow__(self, other) -> "Node":
         if isinstance(other, Node):
             if self.type == float and other.type == float:
-                from .nodes import Power
+                from .customNodes import Power
 
                 return Power(self, other)
 
@@ -211,7 +211,7 @@ class Node:
 
                 return MultiplyFloats(self, self)
 
-            from .nodes import Power
+            from .customNodes import Power
 
             return Power(self, other)
 
@@ -219,7 +219,7 @@ class Node:
 
     def __rpow__(self, other) -> "Node":
         if isNumber(other) and self.type == float:
-            from .nodes import Power
+            from .customNodes import Power
 
             return Power(other, self)
 
