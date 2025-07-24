@@ -11,6 +11,10 @@ from .utils import Color, Position2, Position3, generateId
 data = {"serializableNodes": [], "serializableConnections": []}
 
 
+def isNumber(value):
+    return isinstance(value, numbers.Number) and not isinstance(value, bool)
+
+
 class Node:
     def __init__(self, data: dict, outputIndex=1):
         self.data = data
@@ -65,7 +69,7 @@ class Node:
 
                 return AddVector3(self, other)
 
-        elif isinstance(other, numbers.Number) and self.type == float:
+        elif isNumber(other) and self.type == float:
             from .nodes import AddFloats
 
             return AddFloats(self, other)
@@ -86,7 +90,7 @@ class Node:
 
                 return SubtractVector3(self, other)
 
-        elif isinstance(other, numbers.Number) and self.type == float:
+        elif isNumber(other) and self.type == float:
             from .nodes import SubtractFloats
 
             return SubtractFloats(self, other)
@@ -94,7 +98,7 @@ class Node:
         return NotImplemented
 
     def __rsub__(self, other) -> "Node":
-        if isinstance(other, numbers.Number) and self.type == float:
+        if isNumber(other) and self.type == float:
             from .nodes import SubtractFloats
 
             return SubtractFloats(other, self)
@@ -116,7 +120,7 @@ class Node:
 
                 return ScaleVector3(other, self)
 
-        elif isinstance(other, numbers.Number):
+        elif isNumber(other):
             if self.type == float:
                 from .nodes import MultiplyFloats
 
@@ -138,7 +142,7 @@ class Node:
 
                 return DivideFloats(self, other)
 
-        elif isinstance(other, numbers.Number) and self.type == float:
+        elif isNumber(other) and self.type == float:
             from .nodes import DivideFloats
 
             return DivideFloats(self, other)
@@ -146,7 +150,7 @@ class Node:
         return NotImplemented
 
     def __rtruediv__(self, other) -> "Node":
-        if isinstance(other, numbers.Number) and self.type == float:
+        if isNumber(other) and self.type == float:
             from .nodes import DivideFloats
 
             return DivideFloats(other, self)
@@ -162,7 +166,7 @@ class Node:
         return Operation(result, "floor")
 
     def __rfloordiv__(self, other) -> "Node":
-        if isinstance(other, numbers.Number) and self.type == float:
+        if isNumber(other) and self.type == float:
             from .nodes import DivideFloats
 
             div_result = DivideFloats(other, self)
@@ -179,7 +183,7 @@ class Node:
 
                 return Modulo(self, other)
 
-        elif isinstance(other, numbers.Number) and self.type == float:
+        elif isNumber(other) and self.type == float:
             from .nodes import Modulo
 
             return Modulo(self, other)
@@ -187,7 +191,7 @@ class Node:
         return NotImplemented
 
     def __rmod__(self, other) -> "Node":
-        if isinstance(other, numbers.Number) and self.type == float:
+        if isNumber(other) and self.type == float:
             from .nodes import Modulo
 
             return Modulo(other, self)
@@ -201,7 +205,7 @@ class Node:
 
                 return Power(self, other)
 
-        elif isinstance(other, numbers.Number) and self.type == float:
+        elif isNumber(other) and self.type == float:
             if other == 2:
                 from .nodes import MultiplyFloats
 
@@ -214,7 +218,7 @@ class Node:
         return NotImplemented
 
     def __rpow__(self, other) -> "Node":
-        if isinstance(other, numbers.Number) and self.type == float:
+        if isNumber(other) and self.type == float:
             from .nodes import Power
 
             return Power(other, self)
@@ -259,7 +263,7 @@ class Node:
 
                 return CompareBool(self, other)
 
-        elif isinstance(other, numbers.Number) and self.type == float:
+        elif isNumber(other) and self.type == float:
             from .nodes import CompareFloats
 
             return CompareFloats(self, other)
@@ -286,7 +290,7 @@ class Node:
 
                 return CompareFloats(self, other, "<")
 
-        elif isinstance(other, numbers.Number) and self.type == float:
+        elif isNumber(other) and self.type == float:
             from .nodes import CompareFloats
 
             return CompareFloats(self, other, "<")
@@ -300,7 +304,7 @@ class Node:
 
                 return CompareFloats(self, other, "<=")
 
-        elif isinstance(other, numbers.Number) and self.type == float:
+        elif isNumber(other) and self.type == float:
             from .nodes import CompareFloats
 
             return CompareFloats(self, other, "<=")
@@ -314,7 +318,7 @@ class Node:
 
                 return CompareFloats(self, other, ">")
 
-        elif isinstance(other, numbers.Number) and self.type == float:
+        elif isNumber(other) and self.type == float:
             from .nodes import CompareFloats
 
             return CompareFloats(self, other, ">")
@@ -328,7 +332,7 @@ class Node:
 
                 return CompareFloats(self, other, ">=")
 
-        elif isinstance(other, numbers.Number) and self.type == float:
+        elif isNumber(other) and self.type == float:
             from .nodes import CompareFloats
 
             return CompareFloats(self, other, ">=")
