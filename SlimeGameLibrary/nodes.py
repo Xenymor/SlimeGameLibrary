@@ -31,9 +31,10 @@ def cache(function):
     cachedNodes = {}
 
     def wrapper(*args):
-        if args not in cachedNodes:
-            cachedNodes[args] = function(*args)
-        return cachedNodes[args]
+        cacheArgs = tuple(hash(arg) for arg in args)
+        if cacheArgs not in cachedNodes:
+            cachedNodes[cacheArgs] = function(*args)
+        return cachedNodes[cacheArgs]
 
     return wrapper
 
