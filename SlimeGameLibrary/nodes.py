@@ -210,13 +210,6 @@ def InitializeSlime(
     )
 
 
-def Power(node0: Node, node1: Node):
-    """
-    custom x^y node using x^y = e^(y*ln(x))
-    """
-    return Exp(node1 * Ln(node0))
-
-
 @cache
 def AddVector3(node0: Node, node1: Node):
     baseNode = AddNode("AddVector3")
