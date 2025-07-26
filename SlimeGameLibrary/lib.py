@@ -56,7 +56,7 @@ class Node:
         return f"Node(type='{self.type}', id='{self.data['sID']}')"
 
     def __hash__(self):
-        return int(self.data["sID"].replace("-", ""), 16)
+        return int(self.data["sID"].replace("-", ""), 16) + self.outputIndex
 
     def __add__(self, other) -> "Node":
         if isinstance(other, Node):
