@@ -30,12 +30,19 @@ def parseLiteral(value):
 def cache(function):
     cachedNodes = {}
 
-    def wrapper(*args):
+    def wrapper(*args, **kwargs):
+        disableCache = kwargs.pop("disableCache", False)
         cacheArgs = tuple(hash(arg) for arg in args)
+
+        if disableCache:
+            return function(*args, **kwargs)
+
         if cacheArgs not in cachedNodes:
-            cachedNodes[cacheArgs] = function(*args)
+            cachedNodes[cacheArgs] = function(*args, **kwargs)
+
         return cachedNodes[cacheArgs]
 
+    wrapper.cacheStore = cachedNodes
     return wrapper
 
 
