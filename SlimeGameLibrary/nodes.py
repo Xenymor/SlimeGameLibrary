@@ -35,10 +35,10 @@ def cache(function):
         cacheArgs = tuple(hash(arg) for arg in args)
 
         if disableCache:
-            return function(*args, **kwargs)
+            return function(*args)
 
         if cacheArgs not in cachedNodes:
-            cachedNodes[cacheArgs] = function(*args, **kwargs)
+            cachedNodes[cacheArgs] = function(*args)
 
         return cachedNodes[cacheArgs]
 
