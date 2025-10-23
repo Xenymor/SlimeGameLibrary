@@ -1,16 +1,17 @@
 from SlimeGameLibrary import *
 
-# 1 to 1 recreation of the default AIA bot
 
-InitializeSlime("AIA", "Yellow", "United States of America", 5, 3, 2)
+InitializeSlime("0.3", "Black", "Germany", 3, 5, 2)
 
 positionSign = RelativePosition(Self.TeamSpawn, "Backward")
 
-moveTo = Ball.Position + positionSign * 0.4
+
+
+moveTo = Ball.Position
 
 distanceToBall = Distance(Ball.Position, Self.Position)
-jumpCondition = distanceToBall < 2.25
+jumpCondition = distanceToBall <= 2
 
 SlimeController(moveTo, jumpCondition)
 
-SaveData("SlimeVolleyball/AIComp_Data/Saves/AIA python.txt", "grid")
+SaveData("C:/Users/timon/Documents/Spiele/Slime Volleyball/AIComp_Data/Saves/0.3.txt", "grid")
